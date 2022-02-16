@@ -17,11 +17,30 @@
  */
 struct list_head *q_new()
 {
-    return NULL;
+    // this maybe right
+    struct list_head *q = malloc(sizeof(struct list_head));
+    q->next = q;
+    q->prev = q;
+    return q;
 }
 
 /* Free all storage used by queue */
-void q_free(struct list_head *l) {}
+void q_free(struct list_head *l)
+{
+    // TODO: this may take too much time
+    // end is used to test if all node is freed
+    struct list_head *end = l;
+    // cur is used to traverse the list
+    struct list_head *cur = l;
+
+    while (cur != end) {
+        cur = cur->next;
+        free(cur->prev);
+    }
+
+    end->next = end->prev = end;
+    /* free(end); */
+}
 
 /*
  * Attempt to insert element at head of queue.
@@ -32,6 +51,11 @@ void q_free(struct list_head *l) {}
  */
 bool q_insert_head(struct list_head *head, char *s)
 {
+    struct list_head *q = malloc(sizeof(struct list_head));
+    q->next = head->next;
+    q->prev = head;
+    q->next->prev = q;
+    head->next = q;
     return true;
 }
 
@@ -44,6 +68,8 @@ bool q_insert_head(struct list_head *head, char *s)
  */
 bool q_insert_tail(struct list_head *head, char *s)
 {
+    /* struct list_head *q = malloc(sizeof(struct list_head)); */
+
     return true;
 }
 
